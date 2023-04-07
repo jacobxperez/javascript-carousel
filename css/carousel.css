@@ -80,7 +80,7 @@ object {
     transition: all 0.5s ease-in-out 0s;
 }
 
-.slide-current {
+[data-slide="current"] {
     z-index: 5;
     visibility: visible;
     opacity: 1;
