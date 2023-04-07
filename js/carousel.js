@@ -8,13 +8,13 @@ class Carousel {
     constructor(selector, children, intervalTime = 5000) {
         this.slider = document.querySelector(selector);
         this.slides = this.slider.querySelectorAll(children);
-        this.totalImages = this.slider.querySelectorAll('img');
-        this.slideBtnContainer = this.slider.querySelector('.slider-nav');
         this.totalSlides = this.slides.length;
+        this.totalImages = this.slider.querySelectorAll('img');
+        this.controlsContainer = this.slider.querySelector('.slider-nav');
         this.imgCache = [];
         this.currIndex = 0;
-        this.intervalTime = parseInt(intervalTime);
         this.sliderInterval;
+        this.intervalTime = parseInt(intervalTime);
         this.cycleItems = this.cycleItems.bind(this);
         this.changeSlide = this.changeSlide.bind(this);
         this.autoStart = this.autoStart.bind(this);
@@ -25,7 +25,7 @@ class Carousel {
     initialize() {
         this.preloadImages().then(() => {
             this.cycleItems();
-            this.slideBtnContainer.addEventListener('click', (e) => {
+            this.controlsContainer.addEventListener('click', (e) => {
                 const target = e.target;
                 if (target.classList.contains('next-slide')) {
                     this.changeSlide('next');
@@ -40,11 +40,12 @@ class Carousel {
 
     cycleItems() {
         const currSlide = this.slides[this.currIndex];
-        this.slides[this.currIndex].classList.add('slide-current');
+        this.slides[this.currIndex].setAttribute('data-slide', 'current');
         requestAnimationFrame(() => {
             for (const slide of this.slides) {
                 if (slide !== currSlide) {
-                    slide.classList.remove('slide-current');
+                    slide.removeAttributeNS('data-slide', 'current');
+                    slide.setAttribute('data-slide', '');
                 }
             }
         });
@@ -91,4 +92,7 @@ class Carousel {
 }
 
 // Example usage
-const fullScreenCarousel = new Carousel('[data-carousel]', '[data-slide]').autoStart();
+const fullScreenCarousel = new Carousel(
+    '[data-carousel]',
+    '[data-slide]'
+).autoStart();
