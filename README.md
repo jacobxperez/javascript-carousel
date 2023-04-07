@@ -10,7 +10,7 @@ Start by **[downloading](https://github.com/jacobxperez/javascript-carousel/arch
 
 ## Contributing
 
-Help us make this [JavaScript Slider](https://jacobxperez.github.io/javascript-carousel/) better for everyone, any contribution will be considered. Use the [issue tracker](https://github.com/jacobxperez/javascript-carousel/issues) for bug reports, features requests and submitting pull requests.
+Help us make this [JavaScript Carousel](https://jacobxperez.github.io/javascript-carousel/) better for everyone, any contribution will be considered. Use the [issue tracker](https://github.com/jacobxperez/javascript-carousel/issues) for bug reports, features requests and submitting pull requests.
 
 ### Bug Reports
 
