@@ -10,7 +10,7 @@ class Carousel {
         this.slides = this.slider.querySelectorAll(children);
         this.totalSlides = this.slides.length;
         this.totalImages = this.slider.querySelectorAll('img');
-        this.controlsContainer = this.slider.querySelector('.slider-nav');
+        this.controlsContainer = this.slider.querySelector('[data-controls]');
         this.imgCache = [];
         this.currIndex = 0;
         this.sliderInterval;
@@ -23,10 +23,10 @@ class Carousel {
             this.cycleItems();
             this.controlsContainer.addEventListener('click', (e) => {
                 const target = e.target;
-                if (target.classList.contains('next-slide')) {
+                if (target.matches('[data-button="next-slide"]')) {
                     this.changeSlide('next');
                     this.autoStart(8000);
-                } else if (target.classList.contains('prev-slide')) {
+                } else if (target.matches('[data-button="prev-slide"]')) {
                     this.changeSlide('prev');
                     this.autoStart(8000);
                 }
