@@ -1,16 +1,16 @@
-# [Full Screen Content Slider](https://jacobxperez.github.io/full-screen-content-slider/)
+# [JavaScript Carousel](https://jacobxperez.github.io/javascript-carousel/)
 
-A Vanilla JavaScript Full Screen Content Slider
+A Vanilla JavaScript Carousel
 
 ## Getting Started
 
-Start by **[downloading](https://github.com/jacobxperez/full-screen-content-slider/archive/master.zip)** the [repository](https://github.com/jacobxperez/full-screen-content-slider) or by cloning the project:
+Start by **[downloading](https://github.com/jacobxperez/javascript-carousel/archive/master.zip)** the [repository](https://github.com/jacobxperez/javascript-carousel) or by cloning the project:
 
-    git clone https://github.com/jacobxperez/full-screen-content-slider.git
+    git clone https://github.com/jacobxperez/javascript-carousel.git
 
 ## Contributing
 
-Help us make this [JavaScript Slider](https://jacobxperez.github.io/full-screen-content-slider/) better for everyone, any contribution will be considered. Use the [issue tracker](https://github.com/jacobxperez/full-screen-content-slider/issues) for bug reports, features requests and submitting pull requests.
+Help us make this [JavaScript Slider](https://jacobxperez.github.io/javascript-carousel/) better for everyone, any contribution will be considered. Use the [issue tracker](https://github.com/jacobxperez/javascript-carousel/issues) for bug reports, features requests and submitting pull requests.
 
 ### Bug Reports
 
