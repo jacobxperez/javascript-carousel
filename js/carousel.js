@@ -10,11 +10,11 @@ class Carousel {
         this.slides = this.carousel.querySelectorAll(slideSelector);
         this.totalSlides = this.slides.length;
         this.totalImages = this.carousel.querySelectorAll('img');
-        this.controlsContainer = this.carousel.querySelector('[data-controls]');
         this.imgCache = [];
         this.currIndex = 0;
         this.carouselInterval;
         this.intervalTime = parseInt(intervalTime);
+        this.controlsContainer = this.carousel.querySelector('[data-controls]');
         this.controlsContainer.addEventListener(
             'click',
             this.controls.bind(this)
