@@ -6,14 +6,14 @@
 ------------------------------------------------------------------------------*/
 class Carousel {
     constructor(selector, children, intervalTime = 5000) {
-        this.slider = document.querySelector(selector);
-        this.slides = this.slider.querySelectorAll(children);
+        this.carousel = document.querySelector(selector);
+        this.slides = this.carousel.querySelectorAll(children);
         this.totalSlides = this.slides.length;
-        this.totalImages = this.slider.querySelectorAll('img');
-        this.controlsContainer = this.slider.querySelector('[data-controls]');
+        this.totalImages = this.carousel.querySelectorAll('img');
+        this.controls = this.carousel.querySelector('[data-controls]');
         this.imgCache = [];
         this.currIndex = 0;
-        this.sliderInterval;
+        this.carouselInterval;
         this.intervalTime = parseInt(intervalTime);
         this.initialize();
     }
@@ -21,7 +21,7 @@ class Carousel {
     initialize() {
         this.preloadImages().then(() => {
             this.cycleItems();
-            this.controlsContainer.addEventListener('click', (e) => {
+            this.controls.addEventListener('click', (e) => {
                 const target = e.target;
                 if (target.matches('[data-button="next-slide"]')) {
                     this.changeSlide('next');
@@ -77,8 +77,8 @@ class Carousel {
 
     autoStart(time) {
         this.preloadImages().then(() => {
-            clearInterval(this.sliderInterval);
-            this.sliderInterval = setInterval(() => {
+            clearInterval(this.carouselInterval);
+            this.carouselInterval = setInterval(() => {
                 this.changeSlide('next');
             }, time || this.intervalTime);
         });
@@ -89,6 +89,6 @@ class Carousel {
 
 // Example usage
 const fullScreenCarousel = new Carousel(
-    '[data-carousel]',
+    '[data-carousel="fullscreen"]',
     '[data-slide]'
 ).autoStart();
