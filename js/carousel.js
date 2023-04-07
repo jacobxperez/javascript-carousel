@@ -36,12 +36,11 @@ class Carousel {
 
     cycleItems() {
         const currSlide = this.slides[this.currIndex];
-        this.slides[this.currIndex].setAttribute('data-slide', 'current');
+        this.slides[this.currIndex].setAttribute('data-state', 'current');
         requestAnimationFrame(() => {
             for (const slide of this.slides) {
                 if (slide !== currSlide) {
-                    slide.removeAttribute('data-slide');
-                    slide.setAttribute('data-slide', '');
+                    slide.removeAttribute('data-state');
                 }
             }
         });

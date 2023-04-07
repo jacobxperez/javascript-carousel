@@ -80,7 +80,7 @@ object {
     transition: all 0.5s ease-in-out 0s;
 }
 
-[data-slide="current"] {
+[data-carousel] [data-state="current"] {
     z-index: 5;
     visibility: visible;
     opacity: 1;
