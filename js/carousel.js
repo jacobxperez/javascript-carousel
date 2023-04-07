@@ -5,9 +5,9 @@
  * http://www.apache.org/licenses/LICENSE-2.0
 ------------------------------------------------------------------------------*/
 class Carousel {
-    constructor(selector, children, intervalTime = 5000) {
-        this.carousel = document.querySelector(selector);
-        this.slides = this.carousel.querySelectorAll(children);
+    constructor(carouselSelector, slideSelector, intervalTime = 5000) {
+        this.carousel = document.querySelector(carouselSelector);
+        this.slides = this.carousel.querySelectorAll(slideSelector);
         this.totalSlides = this.slides.length;
         this.totalImages = this.carousel.querySelectorAll('img');
         this.controlsContainer = this.carousel.querySelector('[data-controls]');
@@ -68,10 +68,9 @@ class Carousel {
 
     preloadImages() {
         for (const image of this.totalImages) {
-            const imgSrc = image.src;
             const imgPromise = new Promise((resolve) => {
                 const img = new Image();
-                img.src = imgSrc;
+                img.src = `${image.src}`;
                 img.onload = resolve;
             });
             this.imgCache.push(imgPromise);
