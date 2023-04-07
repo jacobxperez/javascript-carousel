@@ -5,15 +5,15 @@
  * http://www.apache.org/licenses/LICENSE-2.0
 ------------------------------------------------------------------------------*/
 class Carousel {
-    constructor(selector, intervalTime = 5000) {
+    constructor(selector, children, intervalTime = 5000) {
         this.slider = document.querySelector(selector);
-        this.slides = this.slider.querySelectorAll('.slide');
+        this.slides = this.slider.querySelectorAll(children);
         this.totalImages = this.slider.querySelectorAll('img');
+        this.slideBtnContainer = this.slider.querySelector('.slider-nav');
         this.totalSlides = this.slides.length;
         this.imgCache = [];
-        this.slideBtnContainer = this.slider.querySelector('.slider-nav');
-        this.intervalTime = parseInt(intervalTime);
         this.currIndex = 0;
+        this.intervalTime = parseInt(intervalTime);
         this.sliderInterval;
         this.cycleItems = this.cycleItems.bind(this);
         this.changeSlide = this.changeSlide.bind(this);
@@ -91,4 +91,4 @@ class Carousel {
 }
 
 // Example usage
-const fullScreenCarousel = new Carousel('.slider').autoStart();
+const fullScreenCarousel = new Carousel('[data-carousel]', '[data-slide]').autoStart();
