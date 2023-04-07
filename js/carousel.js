@@ -15,23 +15,28 @@ class Carousel {
         this.currIndex = 0;
         this.carouselInterval;
         this.intervalTime = parseInt(intervalTime);
+        this.controlsContainer.addEventListener(
+            'click',
+            this.controls.bind(this)
+        );
         this.initialize();
     }
 
     initialize() {
         this.preloadImages().then(() => {
             this.cycleItems();
-            this.controlsContainer.addEventListener('click', (e) => {
-                const target = e.target;
-                if (target.matches('[data-button="next-slide"]')) {
-                    this.changeSlide('next');
-                    this.autoStart(8000);
-                } else if (target.matches('[data-button="prev-slide"]')) {
-                    this.changeSlide('prev');
-                    this.autoStart(8000);
-                }
-            });
         });
+    }
+
+    controls(e) {
+        const target = e.target;
+        if (target.matches('[data-button="next-slide"]')) {
+            this.changeSlide('next');
+            clearInterval(this.carouselInterval);
+        } else if (target.matches('[data-button="prev-slide"]')) {
+            this.changeSlide('prev');
+            clearInterval(this.carouselInterval);
+        }
     }
 
     cycleItems() {
