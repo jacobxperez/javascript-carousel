@@ -10,7 +10,7 @@ class Carousel {
         this.slides = this.carousel.querySelectorAll(children);
         this.totalSlides = this.slides.length;
         this.totalImages = this.carousel.querySelectorAll('img');
-        this.controls = this.carousel.querySelector('[data-controls]');
+        this.controlsContainer = this.carousel.querySelector('[data-controls]');
         this.imgCache = [];
         this.currIndex = 0;
         this.carouselInterval;
@@ -21,7 +21,7 @@ class Carousel {
     initialize() {
         this.preloadImages().then(() => {
             this.cycleItems();
-            this.controls.addEventListener('click', (e) => {
+            this.controlsContainer.addEventListener('click', (e) => {
                 const target = e.target;
                 if (target.matches('[data-button="next-slide"]')) {
                     this.changeSlide('next');
