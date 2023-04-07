@@ -40,7 +40,7 @@ class Carousel {
         requestAnimationFrame(() => {
             for (const slide of this.slides) {
                 if (slide !== currSlide) {
-                    slide.removeAttributeNS('data-slide', 'current');
+                    slide.removeAttribute('data-slide');
                     slide.setAttribute('data-slide', '');
                 }
             }
