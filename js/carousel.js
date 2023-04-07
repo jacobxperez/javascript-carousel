@@ -15,10 +15,6 @@ class Carousel {
         this.currIndex = 0;
         this.sliderInterval;
         this.intervalTime = parseInt(intervalTime);
-        this.cycleItems = this.cycleItems.bind(this);
-        this.changeSlide = this.changeSlide.bind(this);
-        this.autoStart = this.autoStart.bind(this);
-        this.preloadImages = this.preloadImages.bind(this);
         this.initialize();
     }
 
