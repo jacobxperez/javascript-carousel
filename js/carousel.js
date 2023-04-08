@@ -15,11 +15,12 @@ class Carousel {
         this.currIndex = 0;
         this.sliderInterval;
         this.intervalTime = 5000;
+        this.lazyLoadThreshold = 2; // number of slides to preload initially
         this.initialize();
     }
 
     initialize() {
-        this.preloadImages().then(() => {
+        this.preloadInitialImages().then(() => {
             this.cycleItems();
             if (this.controlsContainer) {
                 this.controlsContainer.addEventListener(
@@ -30,11 +31,44 @@ class Carousel {
         });
     }
 
+    preloadInitialImages() {
+        const promises = [];
+        for (
+            let i = 0;
+            i < this.lazyLoadThreshold && i < this.totalImages.length;
+            i++
+        ) {
+            const image = this.totalImages[i];
+            const imgPromise = new Promise((resolve) => {
+                const img = new Image();
+                img.src = `${image.src}`;
+                img.onload = resolve;
+            });
+            promises.push(imgPromise);
+        }
+        return Promise.all(promises);
+    }
+
+    preloadNextImage() {
+        const nextIndex =
+            (this.currIndex + this.lazyLoadThreshold) % this.totalSlides;
+        if (nextIndex < this.totalImages.length) {
+            const image = this.totalImages[nextIndex];
+            const imgPromise = new Promise((resolve) => {
+                const img = new Image();
+                img.src = `${image.src}`;
+                img.onload = resolve;
+            });
+            this.imgCache.push(imgPromise);
+        }
+    }
+
     controls(e) {
         const target = e.target;
         if (target.matches('[data-button="next-slide"]')) {
             this.changeSlide('next');
             clearInterval(this.sliderInterval);
+            this.preloadNextImage();
         } else if (target.matches('[data-button="prev-slide"]')) {
             this.changeSlide('prev');
             clearInterval(this.sliderInterval);
@@ -68,23 +102,12 @@ class Carousel {
         this.cycleItems();
     }
 
-    preloadImages() {
-        for (const image of this.totalImages) {
-            const imgPromise = new Promise((resolve) => {
-                const img = new Image();
-                img.src = `${image.src}`;
-                img.onload = resolve;
-            });
-            this.imgCache.push(imgPromise);
-        }
-        return Promise.all(this.imgCache);
-    }
-
     autoStart(time) {
-        this.preloadImages().then(() => {
+        this.preloadInitialImages().then(() => {
             clearInterval(this.sliderInterval);
             this.sliderInterval = setInterval(() => {
                 this.changeSlide('next');
+                this.preloadNextImage();
             }, time || this.intervalTime);
         });
 
