@@ -76,13 +76,13 @@ class Carousel {
         const target = e.target;
         if (target.matches('[data-button="next-slide"]')) {
             this.changeSlide('next');
-            clearInterval(this.sliderInterval);
+            this.pause();
             this.preloadNextImage();
         } else if (target.matches('[data-button="prev-slide"]')) {
             this.changeSlide('prev');
-            clearInterval(this.sliderInterval);
+            this.pause();
         } else if (target.matches('[data-tab]')) {
-            clearInterval(this.sliderInterval);
+            this.pause();
             this.currIndex = target.getAttribute('data-tab');
             this.cycleItems();
         }
@@ -115,16 +115,33 @@ class Carousel {
         this.cycleItems();
     }
 
+    start(time) {
+        this.autoStart(time || this.intervalTime);
+        return this;
+    }
+
+    stop() {
+        clearInterval(this.sliderInterval);
+        return this;
+    }
+
+    pause() {
+        clearInterval(this.sliderInterval);
+        return this;
+    }
+
+    resume() {
+        this.autoStart(this.intervalTime);
+        return this;
+    }
+
     autoStart(time) {
         this.preloadInitialImages().then(() => {
-            clearInterval(this.sliderInterval);
             this.sliderInterval = setInterval(() => {
                 this.changeSlide('next');
                 this.preloadNextImage();
             }, time || this.intervalTime);
         });
-
-        return this;
     }
 }
 
