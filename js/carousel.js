@@ -5,12 +5,12 @@
  * http://www.apache.org/licenses/LICENSE-2.0
 ------------------------------------------------------------------------------*/
 class Carousel {
-    constructor(sliderSelector, slideSelector) {
+    constructor(sliderSelector, slideSelector, controlsContainer = '[data-controls]') {
         this.slider = document.querySelector(sliderSelector);
         this.slides = this.slider.querySelectorAll(slideSelector);
-        this.totalSlides = this.slides.length;
+        this.controlsContainer = this.slider.querySelector(controlsContainer);
         this.totalImages = this.slider.querySelectorAll('img');
-        this.controlsContainer = this.slider.querySelector('[data-controls]');
+        this.totalSlides = this.slides.length;
         this.imgCache = [];
         this.currIndex = 0;
         this.sliderInterval;
