@@ -5,12 +5,16 @@
  * http://www.apache.org/licenses/LICENSE-2.0
 ------------------------------------------------------------------------------*/
 class Carousel {
-    constructor(sliderSelector, slideSelector, controlsContainer = '[data-controls]') {
+    constructor(
+        sliderSelector,
+        slideSelector,
+        controlsContainer = '[data-controls]'
+    ) {
         this.slider = document.querySelector(sliderSelector);
         this.slides = this.slider.querySelectorAll(slideSelector);
         this.controlsContainer = this.slider.querySelector(controlsContainer);
-        this.totalImages = this.slider.querySelectorAll('img');
-        this.totalSlides = this.slides.length;
+        this.tabs = this.slider.querySelectorAll('[data-tab]');
+        this.images = this.slider.querySelectorAll('img');
         this.imgCache = [];
         this.currIndex = 0;
         this.sliderInterval;
@@ -28,6 +32,11 @@ class Carousel {
                     this.controls.bind(this)
                 );
             }
+            if (this.tabs) {
+                this.tabs.forEach((tab, index) => {
+                    tab.setAttribute('data-tab', index);
+                });
+            }
         });
     }
 
@@ -35,10 +44,10 @@ class Carousel {
         const promises = [];
         for (
             let i = 0;
-            i < this.lazyLoadThreshold && i < this.totalImages.length;
+            i < this.lazyLoadThreshold && i < this.images.length;
             i++
         ) {
-            const image = this.totalImages[i];
+            const image = this.images[i];
             const imgPromise = new Promise((resolve) => {
                 const img = new Image();
                 img.src = `${image.src}`;
@@ -51,9 +60,9 @@ class Carousel {
 
     preloadNextImage() {
         const nextIndex =
-            (this.currIndex + this.lazyLoadThreshold) % this.totalSlides;
-        if (nextIndex < this.totalImages.length) {
-            const image = this.totalImages[nextIndex];
+            (this.currIndex + this.lazyLoadThreshold) % this.slides.length;
+        if (nextIndex < this.images.length) {
+            const image = this.images[nextIndex];
             const imgPromise = new Promise((resolve) => {
                 const img = new Image();
                 img.src = `${image.src}`;
@@ -72,6 +81,10 @@ class Carousel {
         } else if (target.matches('[data-button="prev-slide"]')) {
             this.changeSlide('prev');
             clearInterval(this.sliderInterval);
+        } else if (target.matches('[data-tab]')) {
+            clearInterval(this.sliderInterval);
+            this.currIndex = target.getAttribute('data-tab');
+            this.cycleItems();
         }
     }
 
@@ -90,13 +103,13 @@ class Carousel {
     changeSlide(direction) {
         if (direction === 'next') {
             this.currIndex += 1;
-            if (this.currIndex > this.totalSlides - 1) {
+            if (this.currIndex > this.slides.length - 1) {
                 this.currIndex = 0;
             }
         } else if (direction === 'prev') {
             this.currIndex -= 1;
             if (this.currIndex < 0) {
-                this.currIndex = this.totalSlides - 1;
+                this.currIndex = this.slides.length - 1;
             }
         }
         this.cycleItems();
