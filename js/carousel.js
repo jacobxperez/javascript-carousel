@@ -136,12 +136,10 @@ class Carousel {
     }
 
     autoStart(time) {
-        this.preloadInitialImages().then(() => {
-            this.sliderInterval = setInterval(() => {
-                this.changeSlide('next');
-                this.preloadNextImage();
-            }, time || this.intervalTime);
-        });
+        this.sliderInterval = setInterval(() => {
+            this.changeSlide('next');
+            this.preloadNextImage();
+        }, time || this.intervalTime);
     }
 }
 
