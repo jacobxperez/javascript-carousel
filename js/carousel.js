@@ -117,6 +117,6 @@ class Carousel {
 
 // Example usage
 const fullScreenCarousel = new Carousel(
-    '[data-carousel="fullscreen"]',
+    '[data-carousel]',
     '[data-slide]'
 ).autoStart();
