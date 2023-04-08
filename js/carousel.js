@@ -17,7 +17,7 @@ class Carousel {
         this.intervalTime = 5000;
         this.initialize();
     }
-    
+
     initialize() {
         this.preloadImages().then(() => {
             this.cycleItems();
