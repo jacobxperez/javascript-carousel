@@ -5,16 +5,16 @@
  * http://www.apache.org/licenses/LICENSE-2.0
 ------------------------------------------------------------------------------*/
 class Carousel {
-    constructor(carouselSelector, slideSelector, intervalTime = 5000) {
-        this.carousel = document.querySelector(carouselSelector);
-        this.slides = this.carousel.querySelectorAll(slideSelector);
+    constructor(sliderSelector, slideSelector, intervalTime = 5000) {
+        this.slider = document.querySelector(sliderSelector);
+        this.slides = this.slider.querySelectorAll(slideSelector);
         this.totalSlides = this.slides.length;
-        this.totalImages = this.carousel.querySelectorAll('img');
+        this.totalImages = this.slider.querySelectorAll('img');
         this.imgCache = [];
         this.currIndex = 0;
-        this.carouselInterval;
+        this.sliderInterval;
         this.intervalTime = parseInt(intervalTime);
-        this.controlsContainer = this.carousel.querySelector('[data-controls]');
+        this.controlsContainer = this.slider.querySelector('[data-controls]');
         this.controlsContainer.addEventListener(
             'click',
             this.controls.bind(this)
@@ -32,10 +32,10 @@ class Carousel {
         const target = e.target;
         if (target.matches('[data-button="next-slide"]')) {
             this.changeSlide('next');
-            clearInterval(this.carouselInterval);
+            clearInterval(this.sliderInterval);
         } else if (target.matches('[data-button="prev-slide"]')) {
             this.changeSlide('prev');
-            clearInterval(this.carouselInterval);
+            clearInterval(this.sliderInterval);
         }
     }
 
@@ -80,8 +80,8 @@ class Carousel {
 
     autoStart(time) {
         this.preloadImages().then(() => {
-            clearInterval(this.carouselInterval);
-            this.carouselInterval = setInterval(() => {
+            clearInterval(this.sliderInterval);
+            this.sliderInterval = setInterval(() => {
                 this.changeSlide('next');
             }, time || this.intervalTime);
         });
