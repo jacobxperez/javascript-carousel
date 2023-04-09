@@ -6,26 +6,26 @@
 ------------------------------------------------------------------------------*/
 class Carousel {
     constructor(options = {}) {
-        this.slider = document.querySelector(
-            options.sliderSelector || '[data-carousel]'
+        this.carousel = document.querySelector(
+            options.carouselSelector || '[data-carousel]'
         );
-        this.slides = this.slider.querySelectorAll(
+        this.slides = this.carousel.querySelectorAll(
             options.slideSelector || '[data-slide]'
         );
         if (!this.controls) {
             const controls = document.createElement('nav');
             controls.setAttribute('data-controls', '');
-            this.slider.appendChild(controls);
+            this.carousel.appendChild(controls);
         }
-        this.controls = this.slider.querySelector(
+        this.controls = this.carousel.querySelector(
             options.controlsSelector || '[data-controls]'
         );
         this.tabs = this.controls.querySelectorAll(
             options.tabSelector || '[data-tab]'
         );
-        this.currentIndex = 0;
         this.intervalTime = options.intervalTime || 5000;
         this.lazyLoadThreshold = options.lazyLoadThreshold || 2;
+        this.currentIndex = 0;
         this.initialize();
     }
 
@@ -148,5 +148,11 @@ class Carousel {
 
 // Example usage
 const carousel = new Carousel({
-    // add options to the carousel
+    // all options for the carousel
+    // carouselSelector: '[data-carousel]',
+    // slideSelector: '[data-slide]',
+    // controlsSelector: '[data-controls]',
+    // tabSelector: '[data-tab]',
+    // intervalTime: 5000,
+    // lazyLoadThreshold: 2,
 }).start();
