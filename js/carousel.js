@@ -26,6 +26,7 @@ class Carousel {
         this.intervalTime = options.intervalTime || 5000;
         this.lazyLoadThreshold = options.lazyLoadThreshold || 2;
         this.currentIndex = 0;
+        this.paused = true;
         this.initialize();
     }
 
@@ -78,6 +79,7 @@ class Carousel {
         });
     }
 
+    // Pause and resume auto-play on tap
     handleControls(e) {
         const target = e.target;
         if (target.matches('[data-button="next-slide"]')) {
@@ -90,7 +92,31 @@ class Carousel {
             this.pause();
             this.currentIndex = Number(target.getAttribute('data-index'));
             this.cycleSlides();
+        } else if (target.matches(options.slideSelector)) {
+            if (this.paused) {
+                this.resume();
+                console.log('paused');
+            } else {
+                this.pause();
+                console.log(target);
+            }
         }
+    }
+
+    addTouchControls() {
+        // Add touch event listeners
+        this.carousel.addEventListener(
+            'touchstart',
+            this.handleTouchStart.bind(this)
+        );
+        this.carousel.addEventListener(
+            'touchmove',
+            this.handleTouchMove.bind(this)
+        );
+        this.carousel.addEventListener(
+            'touchend',
+            this.handleTouchEnd.bind(this)
+        );
     }
 
     addIndicators() {
@@ -121,20 +147,43 @@ class Carousel {
         this.cycleSlides();
     }
 
+    // Detect touch events
+    handleTouchStart(e) {
+        this.touchStartX = e.touches[0].clientX;
+        this.touchEndX = this.touchStartX;
+    }
+
+    handleTouchMove(e) {
+        this.touchEndX = e.touches[0].clientX;
+    }
+
+    handleTouchEnd(e) {
+        const touchDistance = this.touchEndX - this.touchStartX;
+
+        if (touchDistance > 0) {
+            this.changeSlide('prev');
+        } else if (touchDistance < 0) {
+            this.changeSlide('next');
+        }
+    }
+
     start(intervalTime = this.intervalTime) {
         this.interval = setInterval(() => {
             this.changeSlide('next');
         }, intervalTime);
+        this.paused = false;
         return this;
     }
 
     pause() {
         clearInterval(this.interval);
+        this.paused = true;
         return this;
     }
 
     resume() {
         this.pause().start();
+        this.paused = false;
         return this;
     }
 
@@ -155,4 +204,6 @@ const carousel = new Carousel({
     // tabSelector: '[data-tab]',
     // intervalTime: 5000,
     // lazyLoadThreshold: 2,
-}).start();
+})
+    .start()
+    .addTouchControls();
