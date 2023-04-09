@@ -12,6 +12,11 @@ class Carousel {
         this.slides = this.slider.querySelectorAll(
             options.slideSelector || '[data-slide]'
         );
+        if (!this.controls) {
+            const controls = document.createElement('nav');
+            controls.setAttribute('data-controls', '');
+            this.slider.appendChild(controls);
+        }
         this.controls = this.slider.querySelector(
             options.controlsSelector || '[data-controls]'
         );
