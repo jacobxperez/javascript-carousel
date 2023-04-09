@@ -34,7 +34,7 @@ class Carousel {
             }
             if (this.tabs) {
                 this.tabs.forEach((tab, index) => {
-                    tab.setAttribute('data-tab', index);
+                    tab.setAttribute('data-index', index);
                 });
             }
         });
@@ -83,7 +83,7 @@ class Carousel {
             this.pause();
         } else if (target.matches('[data-tab]')) {
             this.pause();
-            this.currIndex = target.getAttribute('data-tab');
+            this.currIndex = target.getAttribute('data-index');
             this.cycleItems();
         }
     }
@@ -115,13 +115,8 @@ class Carousel {
         this.cycleItems();
     }
 
-    start(time) {
-        this.autoStart(time || this.intervalTime);
-        return this;
-    }
-
-    stop() {
-        clearInterval(this.sliderInterval);
+    resume() {
+        this.start(this.intervalTime);
         return this;
     }
 
@@ -130,16 +125,17 @@ class Carousel {
         return this;
     }
 
-    resume() {
-        this.autoStart(this.intervalTime);
+    stop() {
+        clearInterval(this.sliderInterval);
         return this;
     }
 
-    autoStart(time) {
+    start(time) {
         this.sliderInterval = setInterval(() => {
             this.changeSlide('next');
             this.preloadNextImage();
         }, time || this.intervalTime);
+        return this;
     }
 }
 
@@ -147,4 +143,4 @@ class Carousel {
 const fullScreenCarousel = new Carousel(
     '[data-carousel]',
     '[data-slide]'
-).autoStart();
+).start();
