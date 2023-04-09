@@ -5,13 +5,19 @@
  * http://www.apache.org/licenses/LICENSE-2.0
 ------------------------------------------------------------------------------*/
 class Carousel {
-    constructor(
-        options = {}
-    ) {
-        this.slider = document.querySelector(options.sliderSelector || '[data-carousel]');
-        this.slides = this.slider.querySelectorAll(options.slideSelector || '[data-slide]');
-        this.controls = this.slider.querySelector(options.controlsSelector || '[data-controls]');
-        this.tabs = this.controls.querySelectorAll(options.tabSelector || '[data-tab]');
+    constructor(options = {}) {
+        this.slider = document.querySelector(
+            options.sliderSelector || '[data-carousel]'
+        );
+        this.slides = this.slider.querySelectorAll(
+            options.slideSelector || '[data-slide]'
+        );
+        this.controls = this.slider.querySelector(
+            options.controlsSelector || '[data-controls]'
+        );
+        this.tabs = this.controls.querySelectorAll(
+            options.tabSelector || '[data-tab]'
+        );
         this.currentIndex = 0;
         this.intervalTime = options.intervalTime || 5000;
         this.lazyLoadThreshold = options.lazyLoadThreshold || 2;
@@ -19,7 +25,7 @@ class Carousel {
     }
 
     initialize() {
-        this.preloadInitialImages().then(() => {
+        this.preloadImages().then(() => {
             this.cycleSlides();
             if (this.controls) {
                 this.controls.addEventListener(
@@ -35,7 +41,7 @@ class Carousel {
         });
     }
 
-    preloadInitialImages() {
+    preloadImages() {
         const promises = [];
         for (
             let i = 0;
