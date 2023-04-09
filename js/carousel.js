@@ -6,17 +6,15 @@
 ------------------------------------------------------------------------------*/
 class Carousel {
     constructor(
-        sliderSelector,
-        slideSelector,
-        controlsSelector = '[data-controls]'
+        options = {}
     ) {
-        this.slider = document.querySelector(sliderSelector);
-        this.slides = this.slider.querySelectorAll(slideSelector);
-        this.controls = this.slider.querySelector(controlsSelector);
-        this.tabs = this.controls.querySelectorAll('[data-tab]');
+        this.slider = document.querySelector(options.sliderSelector || '[data-carousel]');
+        this.slides = this.slider.querySelectorAll(options.slideSelector || '[data-slide]');
+        this.controls = this.slider.querySelector(options.controlsSelector || '[data-controls]');
+        this.tabs = this.controls.querySelectorAll(options.tabSelector || '[data-tab]');
         this.currentIndex = 0;
-        this.intervalTime = 5000;
-        this.lazyLoadThreshold = 2;
+        this.intervalTime = options.intervalTime || 5000;
+        this.lazyLoadThreshold = options.lazyLoadThreshold || 2;
         this.initialize();
     }
 
@@ -84,6 +82,19 @@ class Carousel {
         }
     }
 
+    addIndicators() {
+        const indicatorDiv = document.createElement('div');
+        indicatorDiv.setAttribute('data-tabs', 'indicator');
+
+        for (let i = 0; i < this.slides.length; i++) {
+            const button = document.createElement('button');
+            button.setAttribute('data-tab', i);
+            indicatorDiv.appendChild(button);
+        }
+
+        this.controls.appendChild(indicatorDiv);
+    }
+
     changeSlide(direction) {
         if (direction === 'next') {
             this.currentIndex++;
@@ -125,4 +136,6 @@ class Carousel {
 }
 
 // Example usage
-const carousel = new Carousel('[data-carousel]', '[data-slide]').start();
+const carousel = new Carousel({
+    // add options to the carousel
+}).start();
