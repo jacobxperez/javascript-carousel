@@ -177,18 +177,21 @@ class Carousel {
             this.changeSlide('next');
         }, intervalTime);
         this.paused = false;
+
         return this;
     }
 
     pause() {
         clearInterval(this.interval);
         this.paused = true;
+
         return this;
     }
 
     resume() {
         this.pause().start();
         this.paused = false;
+
         return this;
     }
 
@@ -196,6 +199,7 @@ class Carousel {
         this.pause();
         this.currentIndex = 0;
         this.cycleSlides();
+
         return this;
     }
 }
