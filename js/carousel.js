@@ -27,6 +27,7 @@ class Carousel {
         this.lazyLoadThreshold = options.lazyLoadThreshold || 2;
         this.currentIndex = 0;
         this.paused = true;
+        this.button = document.createElement('button');
         this.initialize();
     }
 
@@ -79,59 +80,6 @@ class Carousel {
         });
     }
 
-    // Pause and resume auto-play on tap
-    handleControls(e) {
-        const target = e.target;
-        if (target.matches('[data-button="next-slide"]')) {
-            this.changeSlide('next');
-            this.resume();
-        } else if (target.matches('[data-button="prev-slide"]')) {
-            this.changeSlide('prev');
-            this.resume();
-        } else if (target.matches('[data-tab]')) {
-            this.pause();
-            this.currentIndex = Number(target.getAttribute('data-index'));
-            this.cycleSlides();
-        } else if (target.matches(options.slideSelector)) {
-            if (this.paused) {
-                this.resume();
-                console.log('paused');
-            } else {
-                this.pause();
-                console.log(target);
-            }
-        }
-    }
-
-    addTouchControls() {
-        // Add touch event listeners
-        this.carousel.addEventListener(
-            'touchstart',
-            this.handleTouchStart.bind(this)
-        );
-        this.carousel.addEventListener(
-            'touchmove',
-            this.handleTouchMove.bind(this)
-        );
-        this.carousel.addEventListener(
-            'touchend',
-            this.handleTouchEnd.bind(this)
-        );
-    }
-
-    addIndicators() {
-        const indicatorDiv = document.createElement('div');
-        indicatorDiv.setAttribute('data-tabs', 'indicator');
-
-        for (let i = 0; i < this.slides.length; i++) {
-            const button = document.createElement('button');
-            button.setAttribute('data-tab', i);
-            indicatorDiv.appendChild(button);
-        }
-
-        this.controls.appendChild(indicatorDiv);
-    }
-
     changeSlide(direction) {
         if (direction === 'next') {
             this.currentIndex++;
@@ -147,7 +95,64 @@ class Carousel {
         this.cycleSlides();
     }
 
-    // Detect touch events
+    handleControls(e) {
+        const target = e.target;
+        if (target.matches('[data-button="next-slide"]')) {
+            this.changeSlide('next');
+            this.resume();
+        } else if (target.matches('[data-button="prev-slide"]')) {
+            this.changeSlide('prev');
+            this.resume();
+        } else if (target.matches('[data-tab]')) {
+            this.pause();
+            this.currentIndex = Number(target.getAttribute('data-index'));
+            this.cycleSlides();
+        }
+    }
+
+    addControls() {
+        const prev = this.button.cloneNode(true);
+        const next = this.button.cloneNode(true);
+        prev.setAttribute('data-button', 'prev-slide');
+        next.setAttribute('data-button', 'next-slide');
+        this.controls.appendChild(prev);
+        this.controls.appendChild(next);
+
+        return this;
+    }
+
+    addIndicators() {
+        const indicatorDiv = document.createElement('div');
+        indicatorDiv.setAttribute('data-tabs', 'indicator');
+
+        for (let i = 0; i < this.slides.length; i++) {
+            const indicatorButton = this.button.cloneNode(true);
+            indicatorButton.setAttribute('data-tab', i);
+            indicatorDiv.appendChild(indicatorButton);
+        }
+
+        this.controls.appendChild(indicatorDiv);
+
+        return this;
+    }
+
+    addTouchControls() {
+        this.carousel.addEventListener(
+            'touchstart',
+            this.handleTouchStart.bind(this)
+        );
+        this.carousel.addEventListener(
+            'touchmove',
+            this.handleTouchMove.bind(this)
+        );
+        this.carousel.addEventListener(
+            'touchend',
+            this.handleTouchEnd.bind(this)
+        );
+
+        return this;
+    }
+
     handleTouchStart(e) {
         this.touchStartX = e.touches[0].clientX;
         this.touchEndX = this.touchStartX;
@@ -206,4 +211,6 @@ const carousel = new Carousel({
     // lazyLoadThreshold: 2,
 })
     .start()
-    .addTouchControls();
+    .addTouchControls()
+    .addIndicators()
+    .addControls();
