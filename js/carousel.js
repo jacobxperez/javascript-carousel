@@ -9,13 +9,16 @@ class Carousel {
         this.carousel = document.querySelector(
             options.carouselSelector || '[data-carousel]'
         );
+        if (!this.carousel) {
+            throw new Error('Carousel element not found in the DOM');
+        }
         this.slides = this.carousel.querySelectorAll(
             options.slideSelector || '[data-slide]'
         );
         if (!this.controls) {
-            const controls = document.createElement('nav');
-            controls.setAttribute('data-controls', '');
-            this.carousel.appendChild(controls);
+            const navElement = document.createElement('nav');
+            navElement.setAttribute('data-controls', '');
+            this.carousel.appendChild(navElement);
         }
         this.controls = this.carousel.querySelector(
             options.controlsSelector || '[data-controls]'
@@ -31,6 +34,7 @@ class Carousel {
         this.initialize();
     }
 
+    // Initialization methods
     initialize() {
         this.preloadImages().then(() => {
             this.cycleSlides();
@@ -68,6 +72,7 @@ class Carousel {
         return Promise.all(promises);
     }
 
+    // Slide cycling methods
     cycleSlides() {
         const currentSlide = this.slides[this.currentIndex];
         currentSlide.setAttribute('data-state', 'current');
@@ -95,6 +100,7 @@ class Carousel {
         this.cycleSlides();
     }
 
+    // Control and indicator methods
     handleControls(e) {
         const target = e.target;
         if (target.matches('[data-button="next-slide"]')) {
@@ -136,6 +142,7 @@ class Carousel {
         return this;
     }
 
+    // Touch control methods
     addTouchControls() {
         this.carousel.addEventListener(
             'touchstart',
@@ -172,6 +179,7 @@ class Carousel {
         }
     }
 
+    // Play/pause/stop methods
     start(intervalTime = this.intervalTime) {
         this.interval = setInterval(() => {
             this.changeSlide('next');
