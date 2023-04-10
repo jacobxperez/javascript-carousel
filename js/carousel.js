@@ -109,7 +109,7 @@ class Carousel {
         } else if (target.matches('[data-button="prev-slide"]')) {
             this.changeSlide('prev');
             this.resume();
-        } else if (target.matches('[data-tab]')) {
+        } else if (target.matches('[data-index]')) {
             this.pause();
             this.currentIndex = Number(target.getAttribute('data-index'));
             this.cycleSlides();
@@ -129,11 +129,12 @@ class Carousel {
 
     addIndicators() {
         const indicatorDiv = document.createElement('div');
-        indicatorDiv.setAttribute('data-tabs', 'indicator');
+        indicatorDiv.setAttribute('data-indicator', 'tabs');
 
         for (let i = 0; i < this.slides.length; i++) {
             const indicatorButton = this.button.cloneNode(true);
-            indicatorButton.setAttribute('data-tab', i);
+            indicatorButton.setAttribute('data-index', i);
+            indicatorButton.setAttribute('data-tab', 'indicator');
             indicatorDiv.appendChild(indicatorButton);
         }
 
