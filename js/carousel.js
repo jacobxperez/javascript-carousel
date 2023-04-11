@@ -19,10 +19,9 @@ class Carousel {
             options.controlsSelector || '[data-controls]'
         );
         if (!this.controls) {
-            const controls = document.createElement('nav');
-            controls.setAttribute('data-controls', '');
-            this.carousel.appendChild(controls);
-            this.controls = controls;
+            this.controls = document.createElement('nav');
+            this.controls.setAttribute('data-controls', '');
+            this.carousel.appendChild(this.controls);
         }
         this.tabs = this.controls.querySelectorAll(
             options.tabSelector || '[data-tab]'
