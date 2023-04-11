@@ -182,8 +182,10 @@ object {
     border: .125rem solid hsla(0, 0%, 100%, 0.8);
     border-radius: 100%;
     box-shadow: 0 .125rem 0.25rem hsla(0, 0%, 0%, 0.5);
+    cursor: pointer;
 }
 
 [data-tab="indicator"][data-state="active"] {
-    background-color: hsla(0, 0%, 100%, 0.8);
+    background-color: #fff;
+    border-color: #fff;
 }
