@@ -68,11 +68,12 @@ class Carousel {
         ) {
             const image = this.slides[i].querySelector('img');
             if (image) {
-                const imgPromise = new Promise((resolve) => {
+                const imgPromise = new Promise((resolve, reject) => {
                     const img = new Image();
                     img.src = image.src;
                     img.onload = resolve;
-                });
+                    img.onerror = reject;
+                  });
                 promises.push(imgPromise);
             }
         }
