@@ -182,6 +182,7 @@ object {
     border: .125rem solid hsla(0, 0%, 100%, 0.8);
     border-radius: 100%;
     box-shadow: 0 .125rem 0.25rem hsla(0, 0%, 0%, 0.5);
+    transition: background-color .5s linear, border-color .5s linear;
     cursor: pointer;
 }
 
