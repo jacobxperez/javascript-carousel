@@ -16,9 +16,9 @@ class Carousel {
             options.slideSelector || '[data-slide]'
         );
         if (!this.controls) {
-            const navElement = document.createElement('nav');
-            navElement.setAttribute('data-controls', '');
-            this.carousel.appendChild(navElement);
+            const controls = document.createElement('nav');
+            controls.setAttribute('data-controls', '');
+            this.carousel.appendChild(controls);
         }
         this.controls = this.carousel.querySelector(
             options.controlsSelector || '[data-controls]'
@@ -128,17 +128,17 @@ class Carousel {
     }
 
     addIndicators() {
-        const indicatorDiv = document.createElement('div');
-        indicatorDiv.setAttribute('data-indicator', 'tabs');
+        const indicator = document.createElement('div');
+        indicator.setAttribute('data-indicator', 'tabs');
 
         for (let i = 0; i < this.slides.length; i++) {
             const indicatorButton = this.button.cloneNode(true);
             indicatorButton.setAttribute('data-index', i);
             indicatorButton.setAttribute('data-tab', 'indicator');
-            indicatorDiv.appendChild(indicatorButton);
+            indicator.appendChild(indicatorButton);
         }
 
-        this.controls.appendChild(indicatorDiv);
+        this.controls.appendChild(indicator);
 
         return this;
     }
