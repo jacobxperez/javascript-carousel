@@ -206,13 +206,20 @@ class Carousel {
         this.touchEndX = e.touches[0].clientX;
     }
 
-    handleTouchEnd(e) {
-        const touchDistance = this.touchEndX - this.touchStartX;
+    handleTouchEnd() {
+        if (
+            typeof this.touchStartX !== 'undefined' &&
+            typeof this.touchEndX !== 'undefined'
+        ) {
+            const touchDistance = this.touchEndX - this.touchStartX;
 
-        if (touchDistance > 0) {
-            this.changeSlide('prev');
-        } else if (touchDistance < 0) {
-            this.changeSlide('next');
+            if (touchDistance > 0) {
+                this.changeSlide('prev');
+                this.resume();
+            } else if (touchDistance < 0) {
+                this.changeSlide('next');
+                this.resume();
+            }
         }
     }
 
