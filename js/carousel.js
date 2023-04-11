@@ -37,6 +37,7 @@ class Carousel {
         this.intervalTime = options.intervalTime || 5000;
         this.lazyLoadThreshold = options.lazyLoadThreshold || 2;
         this.currentIndex = 0;
+        this.indicators = false;
         this.paused = true;
         this.initialize();
     }
@@ -73,7 +74,7 @@ class Carousel {
                     img.src = image.src;
                     img.onload = resolve;
                     img.onerror = reject;
-                  });
+                });
                 promises.push(imgPromise);
             }
         }
@@ -113,7 +114,9 @@ class Carousel {
             });
         });
 
-        this.cycleTabs();
+        if (this.indicators) {
+            this.cycleTabs();
+        }
     }
 
     changeSlide(direction) {
@@ -170,6 +173,8 @@ class Carousel {
         }
 
         this.controls.appendChild(indicator);
+
+        this.indicators = true;
 
         return this;
     }
