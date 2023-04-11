@@ -15,22 +15,29 @@ class Carousel {
         this.slides = this.carousel.querySelectorAll(
             options.slideSelector || '[data-slide]'
         );
+        this.controls = this.carousel.querySelector(
+            options.controlsSelector || '[data-controls]'
+        );
         if (!this.controls) {
             const controls = document.createElement('nav');
             controls.setAttribute('data-controls', '');
             this.carousel.appendChild(controls);
+            this.controls = controls;
         }
-        this.controls = this.carousel.querySelector(
-            options.controlsSelector || '[data-controls]'
-        );
         this.tabs = this.controls.querySelectorAll(
             options.tabSelector || '[data-tab]'
         );
+        if (this.tabs.length === 0) {
+            const tabs = this.controls.querySelectorAll('[data-tab]');
+            if (tabs.length > 0) {
+                this.tabs = tabs;
+            }
+        }
+        this.button = document.createElement('button');
         this.intervalTime = options.intervalTime || 5000;
         this.lazyLoadThreshold = options.lazyLoadThreshold || 2;
         this.currentIndex = 0;
         this.paused = true;
-        this.button = document.createElement('button');
         this.initialize();
     }
 
@@ -73,6 +80,27 @@ class Carousel {
     }
 
     // Slide cycling methods
+    cycleTabs() {
+        const currentTab = this.controls.querySelector(
+            `[data-index="${this.currentIndex}"]`
+        );
+        const prevTab = this.controls.querySelector(`[data-state="active"]`);
+
+        currentTab.setAttribute('data-state', 'active');
+
+        if (prevTab) {
+            prevTab.removeAttribute('data-state');
+        }
+
+        requestAnimationFrame(() => {
+            this.tabs.forEach((tab) => {
+                if (tab !== currentTab && tab !== prevTab) {
+                    tab.removeAttribute('data-state');
+                }
+            });
+        });
+    }
+
     cycleSlides() {
         const currentSlide = this.slides[this.currentIndex];
         currentSlide.setAttribute('data-state', 'current');
@@ -83,6 +111,8 @@ class Carousel {
                 }
             });
         });
+
+        this.cycleTabs();
     }
 
     changeSlide(direction) {
@@ -223,7 +253,7 @@ const carousel = new Carousel({
     // intervalTime: 5000,
     // lazyLoadThreshold: 2,
 })
-    .start()
     .addTouchControls()
     .addIndicators()
-    .addControls();
+    .addControls()
+    .start();
