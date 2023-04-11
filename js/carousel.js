@@ -11,7 +11,7 @@ class Carousel {
         controlsSelector = '[data-controls]',
         tabSelector = '[data-tab]',
         intervalTime = 5000,
-        lazyLoadThreshold = 4,
+        lazyLoadThreshold = 2,
     } = {}) {
         this.carousel = document.querySelector(carouselSelector);
         if (!this.carousel) {
@@ -262,7 +262,7 @@ const carousel = new Carousel({
     // controlsSelector: '[data-controls]',
     // tabSelector: '[data-tab]',
     // intervalTime: 5000,
-    // lazyLoadThreshold: 4,
+    // lazyLoadThreshold: 2,
 })
     .addControls()
     .addIndicators()
