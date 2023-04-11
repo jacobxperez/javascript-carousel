@@ -183,3 +183,7 @@ object {
     border-radius: 100%;
     box-shadow: 0 .125rem 0.25rem hsla(0, 0%, 0%, 0.5);
 }
+
+[data-tab="indicator"][data-state="active"] {
+    background-color: hsla(0, 0%, 100%, 0.8);
+}
