@@ -11,26 +11,17 @@ class Carousel {
         controlsSelector = '[data-controls]',
         tabSelector = '[data-tab]',
         intervalTime = 5000,
-        lazyLoadThreshold = 2,
+        lazyLoadThreshold = 4,
     } = {}) {
         this.carousel = document.querySelector(carouselSelector);
         if (!this.carousel) {
             throw new Error('Carousel element not found in the DOM');
         }
         this.slides = this.carousel.querySelectorAll(slideSelector);
-        this.controls = this.carousel.querySelector(controlsSelector);
-        if (!this.controls) {
-            this.controls = document.createElement('nav');
-            this.controls.setAttribute('data-controls', '');
-            this.carousel.appendChild(this.controls);
-        }
-        this.tabs = this.controls.querySelectorAll(tabSelector);
-        if (this.tabs.length === 0) {
-            const tabs = this.controls.querySelectorAll('[data-tab]');
-            if (tabs.length > 0) {
-                this.tabs = tabs;
-            }
-        }
+        this.controls =
+            this.carousel.querySelector(controlsSelector) ??
+            this.createControls();
+        this.tabs = Array.from(this.controls.querySelectorAll(tabSelector));
         this.button = document.createElement('button');
         this.intervalTime = intervalTime;
         this.lazyLoadThreshold = lazyLoadThreshold;
@@ -41,42 +32,36 @@ class Carousel {
     }
 
     // Initialization methods
-    initialize() {
-        this.preloadImages().then(() => {
-            this.cycleSlides();
-            if (this.controls) {
-                this.controls.addEventListener(
-                    'click',
-                    this.handleControls.bind(this)
-                );
-            }
-            if (this.tabs) {
-                this.tabs.forEach((tab, index) =>
-                    tab.setAttribute('data-index', index)
-                );
-            }
-        });
+    async initialize() {
+        await this.preloadImages();
+        this.cycleSlides();
+        this.controls.addEventListener('click', this.handleControls.bind(this));
+        this.tabs.forEach((tab, index) =>
+            tab.setAttribute('data-index', index)
+        );
     }
 
-    preloadImages() {
-        const promises = [];
-        for (
-            let i = 0;
-            i < this.lazyLoadThreshold && i < this.slides.length;
-            i++
-        ) {
-            const image = this.slides[i].querySelector('img');
-            if (image) {
-                const imgPromise = new Promise((resolve, reject) => {
+    createControls() {
+        const controls = document.createElement('nav');
+        controls.setAttribute('data-controls', '');
+        this.carousel.appendChild(controls);
+        return controls;
+    }
+
+    async preloadImages() {
+        const promises = Array.from(this.slides)
+            .slice(0, this.lazyLoadThreshold)
+            .map((slide) => {
+                const image = slide.querySelector('img');
+                if (!image) return;
+                return new Promise((resolve, reject) => {
                     const img = new Image();
                     img.src = image.src;
                     img.onload = resolve;
                     img.onerror = reject;
                 });
-                promises.push(imgPromise);
-            }
-        }
-        return Promise.all(promises);
+            });
+        await Promise.all(promises);
     }
 
     // Slide cycling methods
@@ -85,19 +70,12 @@ class Carousel {
             `[data-index="${this.currentIndex}"]`
         );
         const prevTab = this.controls.querySelector(`[data-state="active"]`);
-
         currentTab.setAttribute('data-state', 'active');
-
-        if (prevTab) {
-            prevTab.removeAttribute('data-state');
-        }
-
+        prevTab?.removeAttribute('data-state');
         requestAnimationFrame(() => {
-            this.tabs.forEach((tab) => {
-                if (tab !== currentTab && tab !== prevTab) {
-                    tab.removeAttribute('data-state');
-                }
-            });
+            this.tabs
+                .filter((tab) => ![currentTab, prevTab].includes(tab))
+                .forEach((tab) => tab.removeAttribute('data-state'));
         });
     }
 
@@ -105,13 +83,10 @@ class Carousel {
         const currentSlide = this.slides[this.currentIndex];
         currentSlide.setAttribute('data-state', 'current');
         requestAnimationFrame(() => {
-            this.slides.forEach((slide) => {
-                if (slide !== currentSlide) {
-                    slide.removeAttribute('data-state');
-                }
-            });
+            Array.from(this.slides)
+                .filter((slide) => slide !== currentSlide)
+                .forEach((slide) => slide.removeAttribute('data-state'));
         });
-
         if (this.indicators) {
             this.cycleTabs();
         }
@@ -221,6 +196,27 @@ class Carousel {
         }
     }
 
+    // Keyboard control methods
+    addKeyboardControls() {
+        document.addEventListener('keydown', this.handleKeyDown.bind(this));
+        return this;
+    }
+
+    handleKeyDown(e) {
+        switch (e.key) {
+            case 'ArrowLeft':
+                this.changeSlide('prev');
+                this.resume();
+                break;
+            case 'ArrowRight':
+                this.changeSlide('next');
+                this.resume();
+                break;
+            default:
+                break;
+        }
+    }
+
     // Play/pause/stop methods
     start(intervalTime = this.intervalTime) {
         this.interval = setInterval(() => {
@@ -232,15 +228,19 @@ class Carousel {
     }
 
     pause() {
-        clearInterval(this.interval);
         this.paused = true;
+        clearInterval(this.interval);
 
         return this;
     }
 
     resume() {
-        this.pause().start();
-        this.paused = false;
+        if (this.paused) {
+            this.paused = false;
+            this.interval = setInterval(() => {
+                this.changeSlide('next');
+            }, this.intervalTime);
+        }
 
         return this;
     }
@@ -262,9 +262,10 @@ const carousel = new Carousel({
     // controlsSelector: '[data-controls]',
     // tabSelector: '[data-tab]',
     // intervalTime: 5000,
-    // lazyLoadThreshold: 2,
+    // lazyLoadThreshold: 4,
 })
-    .addTouchControls()
-    .addIndicators()
     .addControls()
+    .addIndicators()
+    .addTouchControls()
+    .addKeyboardControls()
     .start();
