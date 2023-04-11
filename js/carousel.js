@@ -5,27 +5,26 @@
  * http://www.apache.org/licenses/LICENSE-2.0
 ------------------------------------------------------------------------------*/
 class Carousel {
-    constructor(options = {}) {
-        this.carousel = document.querySelector(
-            options.carouselSelector || '[data-carousel]'
-        );
+    constructor({
+        carouselSelector = '[data-carousel]',
+        slideSelector = '[data-slide]',
+        controlsSelector = '[data-controls]',
+        tabSelector = '[data-tab]',
+        intervalTime = 5000,
+        lazyLoadThreshold = 2,
+    } = {}) {
+        this.carousel = document.querySelector(carouselSelector);
         if (!this.carousel) {
             throw new Error('Carousel element not found in the DOM');
         }
-        this.slides = this.carousel.querySelectorAll(
-            options.slideSelector || '[data-slide]'
-        );
-        this.controls = this.carousel.querySelector(
-            options.controlsSelector || '[data-controls]'
-        );
+        this.slides = this.carousel.querySelectorAll(slideSelector);
+        this.controls = this.carousel.querySelector(controlsSelector);
         if (!this.controls) {
             this.controls = document.createElement('nav');
             this.controls.setAttribute('data-controls', '');
             this.carousel.appendChild(this.controls);
         }
-        this.tabs = this.controls.querySelectorAll(
-            options.tabSelector || '[data-tab]'
-        );
+        this.tabs = this.controls.querySelectorAll(tabSelector);
         if (this.tabs.length === 0) {
             const tabs = this.controls.querySelectorAll('[data-tab]');
             if (tabs.length > 0) {
@@ -33,8 +32,8 @@ class Carousel {
             }
         }
         this.button = document.createElement('button');
-        this.intervalTime = options.intervalTime || 5000;
-        this.lazyLoadThreshold = options.lazyLoadThreshold || 2;
+        this.intervalTime = intervalTime;
+        this.lazyLoadThreshold = lazyLoadThreshold;
         this.currentIndex = 0;
         this.indicators = false;
         this.paused = true;
